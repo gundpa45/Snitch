@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router";
 import fashionModel from "../../../assets/fashion_model.png";
+import { useAuth } from "../hook/useAuth";
 
 /* ─── Eye Toggle Icon ─────────────────────────────────────── */
 const EyeOff = () => (
@@ -57,6 +58,13 @@ function Field({ label, id, type = "text", placeholder, value, onChange, showTog
 
 /* ─── Page ────────────────────────────────────────────────── */
 export default function Register() {
+
+  const {handleRegister} = useAuth()
+
+
+
+
+
   const [form, setForm] = useState({
     fullName: "", email: "", contactNo: "",
     password: "", confirmPassword: "", isSeller: false,
@@ -65,7 +73,18 @@ export default function Register() {
   const [showCPw, setShowCPw] = useState(false);
 
   const set = id => e => setForm(p => ({ ...p, [id]: e.target.value }));
-  const submit = e => { e.preventDefault(); console.log(form); };
+ 
+  const submit = async(e) => {
+     e.preventDefault(); 
+     await handleRegister({
+      email: form.email,
+      password: form.password,
+      fullname: form.fullName,
+      contact: form.contactNo,
+      isSeller: form.isSeller,
+     })
+     };
+ 
   const toggleSeller = () => setForm(p => ({ ...p, isSeller: !p.isSeller }));
 
   return (
